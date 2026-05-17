@@ -3932,7 +3932,7 @@ window.addEventListener('scroll',()=>{
 
 /* ── Dark mode ───────────────────────────────────────────────── */
 let darkMode=localStorage.getItem('iiacss-dark')==='1'||
-  (window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);
+  /*(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);
 function applyDark(on){
   darkMode=on;
   document.getElementById('htmlRoot').classList.toggle('dark',on);
@@ -3943,7 +3943,8 @@ function applyDark(on){
   setTimeout(()=>{Object.values(CH).forEach(c=>{try{c.resize();}catch(e){}});},50);
 }
 function toggleDark(){applyDark(!darkMode);}
-
+*/
+     let darkMode = false;
 /* ── KPI counter animation ───────────────────────────────────── */
 function animateKPIs(pageEl){
   const kpiVals=pageEl.querySelectorAll('.kpi-val');
