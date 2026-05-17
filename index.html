@@ -939,10 +939,10 @@ function renderHL(){
 <div class="card-body"><div id="hl_inc" class="chart ch-sm"></div></div>${srcBar(['ii','cso'])}
 </div>
 </div>`;
-  requestAnimationFrame(()=>{hl_gdp();hl_pop();hl_soc();hl_tmp();
+  setTimeout(()=>{hl_gdp();hl_pop();hl_soc();hl_tmp();
     ec('hl_infl',{tooltip:TTP,grid:{...GRD,left:44,bottom:40},xAxis:{type:'category',data:D.infl.yr,axisLabel:{interval:0,fontSize:10}},yAxis:{type:'value',axisLabel:{formatter:v=>v+'%',fontSize:10}},series:[{type:'bar',data:D.infl.v,itemStyle:{color:p=>p.value<0?CC[2]:p.value>4?CC[1]:CC[0]},label:{show:true,position:'top',formatter:({value:v})=>v+'%',fontSize:10}}]});
     ec('hl_inc',{tooltip:{trigger:'item',formatter:'{b}: {c}%'},legend:{bottom:4,textStyle:{fontSize:10},type:'scroll'},series:[{type:'pie',radius:['40%','68%'],label:{formatter:'{b}\n{c}%',fontSize:10},data:D.income.map((d,i)=>({value:d.p,name:d.g,itemStyle:{color:CC[i]}}))}]});
-  });
+  },50);
 }
 function hl_gdp(){const idx=parseInt(document.getElementById('hl_gyr')?.value||0);const yr=D.gdp.yr.slice(idx),v=D.gdp.v.slice(idx);ec('hl_gdp',{tooltip:TTP,grid:{...GRD,left:52,bottom:40},xAxis:{type:'category',data:yr,axisLabel:{interval:0,fontSize:9,rotate:35}},yAxis:{type:'value',axisLabel:{formatter:v=>'$'+v+'B',fontSize:10}},series:[{type:'line',data:v,smooth:true,lineStyle:{color:CC[0],width:2.5},areaStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'rgba(40,40,140,.2)'},{offset:1,color:'rgba(40,40,140,0)'}]}},itemStyle:{color:CC[0]},symbol:'circle',symbolSize:5}]});}
 function hl_pop(){const fp=document.getElementById('hl_pper')?.value||'all';const hY=D.pop.yr,hV=D.pop.v.map(v=>+(v/1e6).toFixed(2));const fY=D.popFc.yr,fV=D.popFc.v.map(v=>+(v/1e6).toFixed(2));let ser=[];if(fp!=='fc')ser.push({name:'Historical',type:'line',data:hV,smooth:true,lineStyle:{color:CC[0],width:2},itemStyle:{color:CC[0]},symbol:'circle',symbolSize:3,areaStyle:{color:'rgba(40,40,140,.07)'}});if(fp!=='hist'){const fcData=fp==='fc'?fV:[...new Array(hV.length-1).fill(null),hV[hV.length-1],...fV.slice(1)];ser.push({name:'Forecast',type:'line',data:fcData,smooth:true,lineStyle:{color:CC[2],width:2,type:'dashed'},itemStyle:{color:CC[2]},symbol:'circle',symbolSize:3});}const allY=fp==='hist'?hY:fp==='fc'?fY:[...hY,...fY.slice(1)];ec('hl_pop',{tooltip:{...TTP,formatter:p=>`${p[0].axisValue}: ${p[0].value}M`},legend:{top:0,textStyle:{fontSize:10}},grid:{...GRD,left:44,bottom:40},xAxis:{type:'category',data:allY,axisLabel:{interval:3,fontSize:9,rotate:35}},yAxis:{type:'value',axisLabel:{formatter:v=>v+'M',fontSize:10}},series:ser});}
@@ -1005,10 +1005,10 @@ ${srcBar(['cso'])}
 <div class="card-body"><div id="ecoTariff" class="chart" style="height:380px"></div></div>
 ${srcBar(['mof'])}
 </div>`;
-  requestAnimationFrame(()=>{eco_gdp();eco_sec();eco_infl();eco_tariff();
+  setTimeout(()=>{eco_gdp();eco_sec();eco_infl();eco_tariff();
     ec('eco_unemp',{tooltip:TTP,grid:{...GRD,left:48,bottom:40},xAxis:{type:'category',data:D.unemp.yr,axisLabel:{interval:0}},yAxis:{type:'value',min:10,axisLabel:{formatter:v=>v+'%'}},series:[{type:'line',data:D.unemp.v,smooth:true,lineStyle:{color:CC[1],width:2.5},areaStyle:{color:'rgba(200,20,20,.08)'},itemStyle:{color:CC[1]},symbol:'circle',symbolSize:6,label:{show:true,formatter:({value:v})=>v+'%',fontSize:10}}]});
     ec('eco_fdi',{tooltip:TTP,grid:{...GRD,left:52,bottom:40},xAxis:{type:'category',data:D.fdi.yr,axisLabel:{interval:0}},yAxis:{type:'value',axisLabel:{formatter:v=>'$'+v+'B'}},series:[{type:'bar',data:D.fdi.v,itemStyle:{color:p=>p.value<0?'#e74c3c':'#1A8537'},label:{show:true,position:'insideBottom',formatter:({value:v})=>'$'+v+'B',distance:8,fontSize:11,color:'#fff'}}]});
-  });
+  },50);
 }
 function eco_gdp(){const i=parseInt(document.getElementById('eco_gyr')?.value||0);const yr=D.gdp.yr.slice(i),v=D.gdp.v.slice(i);ec('eco_gdp',{tooltip:TTP,grid:{...GRD,left:56},xAxis:{type:'category',data:yr,axisLabel:{interval:0}},yAxis:{type:'value',axisLabel:{formatter:v=>'$'+v+'B'}},series:[{type:'line',data:v,smooth:true,lineStyle:{color:CC[0],width:2.5},areaStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'rgba(40,40,140,.2)'},{offset:1,color:'rgba(40,40,140,0)'}]}},itemStyle:{color:CC[0]},symbol:'circle',symbolSize:5,markPoint:{data:[{type:'max',name:'Max'},{type:'min',name:'Min'}]}}]});}
 function eco_sec(){const q=document.getElementById('eco_qtr')?.value||'q1';ec('eco_sec',{tooltip:{trigger:'item',formatter:'{b}: {d}%'},legend:{bottom:4,textStyle:{fontSize:10},type:'scroll',padding:[0,10]},series:[{type:'pie',radius:['35%','65%'],data:D.gdpSec.map((d,i)=>({value:d[q],name:d.n,itemStyle:{color:CC[i%CC.length]}})),label:{formatter:'{b}\n{d}%',fontSize:9}}]});}
@@ -1137,7 +1137,7 @@ function renderPop(){
 <div class="card-hdr"><div><div class="card-title">${ar?'أكبر 10 مدن بالسكان (تقدير 2025)':'Top 10 Cities by Population (2025 estimate)'}</div></div></div>
 <div class="card-body"><div id="pop_cit" class="chart ch-md"></div></div>${srcBar(['wb'])}
 </div>`;
-  requestAnimationFrame(()=>{pop_pyr();pop_hh();
+  setTimeout(()=>{pop_pyr();pop_hh();
     const hY=D.pop.yr,hV=D.pop.v.map(v=>+(v/1e6).toFixed(2));
     const fY=D.popFc.yr,fV=D.popFc.v.map(v=>+(v/1e6).toFixed(2));
     ec('pop_trend',{tooltip:{...TTP,formatter:p=>`${p[0].axisValue}: ${p[0].value}M`},legend:{top:0,textStyle:{fontSize:10}},grid:{...GRD,left:44},xAxis:{type:'category',data:[...hY,...fY.slice(1)],axisLabel:{interval:3,fontSize:9,rotate:30}},yAxis:{type:'value',axisLabel:{formatter:v=>v+'M',fontSize:10}},series:[{name:'Historical',type:'line',data:hV,smooth:true,lineStyle:{color:CC[0],width:2},itemStyle:{color:CC[0]},symbol:'circle',symbolSize:3,areaStyle:{color:'rgba(40,40,140,.07)'}},{name:'Forecast',type:'line',data:[...new Array(hV.length-1).fill(null),hV[hV.length-1],...fV.slice(1)],smooth:true,lineStyle:{color:CC[2],width:2,type:'dashed'},itemStyle:{color:CC[2]},symbol:'circle',symbolSize:4}]});
@@ -1147,7 +1147,7 @@ function renderPop(){
     ec('pop_pov',{tooltip:TTP,grid:{...GRD,left:100,bottom:40,containLabel:true},xAxis:{type:'value',max:50,axisLabel:{formatter:v=>v+'%'}},yAxis:{type:'category',data:pov.map(d=>gn(d.g))},series:[{type:'bar',data:pov.map(d=>d.r),itemStyle:{color:p=>p.value>30?CC[1]:p.value>20?CC[4]:CC[0]},label:{show:true,position:'right',formatter:({value:v})=>v+'%'}}]});
     const cit=[...D.cities].sort((a,b)=>a.p-b.p);
     ec('pop_cit',{tooltip:{...TTP,formatter:p=>`${p[0].axisValue}: ${(p[0].value/1e6).toFixed(2)}M`},grid:{top:12,right:95,bottom:28,left:100,containLabel:true},xAxis:{type:'value',axisLabel:{formatter:v=>(v/1e6).toFixed(1)+'M',fontSize:10}},yAxis:{type:'category',data:cit.map(d=>d.c),axisLabel:{fontSize:11}},series:[{type:'bar',data:cit.map(d=>d.p),itemStyle:{color:p=>p.dataIndex===cit.length-1?CC[1]:CC[0]},label:{show:true,position:'right',formatter:({value:v})=>(v/1e6).toFixed(2)+'M',fontSize:11}}]});
-  });
+  },50);
 }
 function pop_pyr(){const f=document.getElementById('pop_pyrf')?.value||'all';const src=f==='urb'?D.pyrUrb:f==='rur'?D.pyrRur:D.pyrAll;const ages=[...D.ageL].reverse();const mv=src.m.map(v=>-v).reverse();const fv=src.f.slice().reverse();const ar=LANG==='ar';ec('pop_pyr',{tooltip:{trigger:'axis',formatter:ps=>{const ag=ages[ps[0]?.dataIndex];return`<b>${ag}</b><br/>${ar?'ذكور':'Male'}: ${Math.abs(ps[0]?.value||0).toFixed(2)}% | ${ar?'إناث':'Female'}: ${(ps[1]?.value||0).toFixed(2)}%`}},legend:{data:[ar?'ذكور':'Male',ar?'إناث':'Female'],top:0},grid:{top:28,right:18,bottom:22,left:50},xAxis:{type:'value',axisLabel:{formatter:v=>Math.abs(v)+'%',fontSize:10}},yAxis:{type:'category',data:ages,axisLabel:{fontSize:9}},series:[{name:ar?'ذكور':'Male',type:'bar',stack:'p',data:mv,itemStyle:{color:CC[0]},barWidth:'55%'},{name:ar?'إناث':'Female',type:'bar',stack:'p',data:fv,itemStyle:{color:CC[1]},barWidth:'55%'}]});}
 function pop_hh(){const f=document.getElementById('pop_hhf')?.value||'desc';let d=[...D.hhSize.g.map((g,i)=>({g,s:D.hhSize.s[i]}))];if(f==='desc')d.sort((a,b)=>b.s-a.s);ec('pop_hh',{tooltip:TTP,grid:{...GRD,left:80,bottom:60,containLabel:true},xAxis:{type:'category',data:d.map(x=>gn(x.g)),axisLabel:{rotate:40,fontSize:9}},yAxis:{type:'value',min:3.5,axisLabel:{formatter:v=>v+'',fontSize:10}},series:[{type:'bar',data:d.map(x=>x.s),itemStyle:{color:CC[0]},label:{show:true,position:'top',formatter:({value:v})=>v.toFixed(2),fontSize:10}}],markLine:{data:[{yAxis:5.77,name:'Iraq Avg',lineStyle:{color:CC[1],type:'dashed'},label:{formatter:'Iraq Avg: 5.77'}}]}});}
@@ -1221,10 +1221,10 @@ function renderCensus(){
 </div>
 ${srcBar(['cso','mp'])}
 </div>`;
-  requestAnimationFrame(()=>{cen_gov();cen_water();cen_sew();renderCensusHeatmap();
-    const ws=[...D.cns.govs].sort((a,b)=>b.waste-a.waste);
-    ec('cen_waste',{tooltip:{...TTP,formatter:p=>`${p[0].axisValue}: ${p[0].value}%`},grid:{...GRD,left:80,bottom:68,containLabel:true},xAxis:{type:'category',data:ws.map(d=>gn(d.g)),axisLabel:{rotate:35,fontSize:9}},yAxis:{type:'value',max:100,axisLabel:{formatter:v=>v+'%',fontSize:10}},series:[{type:'bar',data:ws.map(d=>d.waste),itemStyle:{color:p=>p.value>75?CC[6]:p.value>50?CC[0]:CC[1]},label:{show:true,position:'top',formatter:({value:v})=>v.toFixed(0)+'%',fontSize:9}}]});
-  });
+  setTimeout(()=>{try{cen_gov();}catch(e){}try{cen_water();}catch(e){}try{cen_sew();}catch(e){}try{renderCensusHeatmap();}catch(e){};
+    try{const ws=[...D.cns.govs].sort((a,b)=>b.waste-a.waste);
+    ec('cen_waste',{tooltip:{...TTP,formatter:p=>`${p[0].axisValue}: ${p[0].value}%`},grid:{...GRD,left:80,bottom:68,containLabel:true},xAxis:{type:'category',data:ws.map(d=>gn(d.g)),axisLabel:{rotate:35,fontSize:9}},yAxis:{type:'value',max:100,axisLabel:{formatter:v=>v+'%',fontSize:10}},series:[{type:'bar',data:ws.map(d=>d.waste),itemStyle:{color:p=>p.value>75?CC[6]:p.value>50?CC[0]:CC[1]},label:{show:true,position:'top',formatter:({value:v})=>v.toFixed(0)+'%',fontSize:9}}]});}catch(e){}
+  },100);
 }
 function cen_gov(){const m=document.getElementById('cen_met')?.value||'dep';const ar=LANG==='ar';const suf={'dep':'','p014':'%','p65':'%','avgHH':'','pUrb':'%','water':'%','sew':'%','waste':'%'};const s=[...D.cns.govs].sort((a,b)=>b[m]-a[m]);ec('cen_gov',{tooltip:{...TTP,formatter:p=>`${p[0].axisValue}: <b>${p[0].value}${suf[m]||''}</b>`},grid:{...GRD,left:80,bottom:68,containLabel:true},xAxis:{type:'category',data:s.map(d=>gn(d.g)),axisLabel:{rotate:35,fontSize:9}},yAxis:{type:'value',axisLabel:{formatter:v=>v+(suf[m]||''),fontSize:10}},series:[{type:'bar',data:s.map(d=>d[m]),itemStyle:{color:CC[0]},label:{show:true,position:'top',formatter:({value:v})=>v+(suf[m]||''),fontSize:9}}],markLine:{data:[{type:'average',label:{formatter:ar?'المتوسط':'Avg',fontSize:10}}]}});}
 function cen_water(){const f=document.getElementById('cen_wf')?.value||'desc';const d=[...D.cns.govs].sort((a,b)=>f==='desc'?b.water-a.water:a.water-b.water).reverse();ec('cen_wat',{tooltip:{...TTP,formatter:p=>`${p[0].axisValue}: ${p[0].value}%`},grid:{top:10,right:50,bottom:40,left:90,containLabel:true},xAxis:{type:'value',min:60,max:103,axisLabel:{formatter:v=>v>100?'':v+'%',fontSize:10},splitNumber:4},yAxis:{type:'category',data:d.map(x=>gn(x.g)),axisLabel:{fontSize:9}},series:[{type:'bar',data:d.map(x=>x.water),itemStyle:{color:p=>p.value>=90?CC[6]:p.value>=80?CC[3]:CC[4]},label:{show:true,position:'right',formatter:({value:v})=>v.toFixed(1)+'%',fontSize:10}}]});}
@@ -1273,9 +1273,9 @@ function renderFood(){
 </tbody></table>
 <div class="info" style="margin-top:10px;margin-bottom:0;font-size:11.5px">${ar?'سعر الصرف المستخدم: 1 دولار ≈ 1,310 دينار (2025). الرواتب قد تختلف حسب المدينة وصاحب العمل.':'Rate: 1 USD ≈ 1,310 IQD (2025). Wages vary by city and employer. Baghdad typically offers the highest wages.'}</div>
 </div>${srcBar(['ii','mof'])}</div>`;
-  requestAnimationFrame(()=>{fd_dist();fd_dishes();fd_prices();
+  setTimeout(()=>{fd_dist();fd_dishes();fd_prices();
     ec('fd_age',{tooltip:{trigger:'item',formatter:'{b}: {c}%'},legend:{bottom:10},series:[{type:'pie',radius:['42%','70%'],label:{formatter:'{b}\n{c}%',fontSize:12},data:D.fByAge.map((d,i)=>({value:d.p,name:d.a,itemStyle:{color:CC[i]}}))}]});
-  });
+  },50);
 }
 function fd_dist(){const f=document.getElementById('fd_dtype')?.value||'pie';if(f==='pie'){ec('fd_dist',{tooltip:{trigger:'item',formatter:'{b}: {c} ({d}%)'},legend:{bottom:10},series:[{type:'pie',radius:['38%','65%'],data:D.foodDist.map((d,i)=>({value:d.n,name:d.c,itemStyle:{color:CC[i]}})),label:{formatter:'{b}: {c}'}}]});}else{const d=[...D.foodDist].sort((a,b)=>b.n-a.n);ec('fd_dist',{tooltip:TTP,grid:{...GRD,left:70,bottom:40},xAxis:{type:'category',data:d.map(x=>x.c)},yAxis:{type:'value'},series:[{type:'bar',data:d.map(x=>x.n),itemStyle:{color:p=>CC[p.dataIndex]},label:{show:true,position:'top'}}]});}}
 function fd_dishes(){const f=parseFloat(document.getElementById('fd_dfl')?.value||'0');const d=[...D.dishes].filter(x=>!f||x.r>=f).sort((a,b)=>a.r-b.r);ec('fd_dishes',{tooltip:TTP,grid:{top:10,right:70,bottom:28,left:130,containLabel:true},xAxis:{type:'value',min:2.5,max:4.5},yAxis:{type:'category',data:d.map(x=>x.d),axisLabel:{fontSize:10}},series:[{type:'bar',data:d.map(x=>x.r),itemStyle:{color:p=>p.value>=4?CC[7]:p.value>=3.5?CC[0]:CC[4]},label:{show:true,position:'right',formatter:({value:v})=>v.toFixed(1)+'⭐',fontSize:11}}]});}
@@ -1310,9 +1310,9 @@ function renderSocial(){
 <div class="card-body"><div id="soc_dig" class="chart"></div></div>${srcBar(['dr'])}
 </div>
 </div>`;
-  requestAnimationFrame(()=>{soc_plat();soc_dig();
+  setTimeout(()=>{soc_plat();soc_dig();
     ec('soc_grow',{tooltip:TTP,grid:GRD,xAxis:{type:'category',data:D.intGrow.yr,axisLabel:{interval:1,rotate:30,fontSize:10}},yAxis:{type:'value',axisLabel:{formatter:v=>v+'%'}},series:[{type:'line',data:D.intGrow.p,smooth:true,lineStyle:{color:CC[0],width:2.5},areaStyle:{color:'rgba(40,40,140,.08)'},itemStyle:{color:CC[0]},symbol:'circle',symbolSize:5,label:{show:true,formatter:({value:v})=>v>0?v+'%':'',fontSize:10,position:'top'}}]});
-  });
+  },50);
 }
 function soc_plat(){const f=document.getElementById('soc_pf')?.value||'all';let d=[...D.socPl.pl.map((p,i)=>({p,u:D.socPl.u[i]}))];if(f==='top5')d=d.sort((a,b)=>b.u-a.u).slice(0,5);else if(f==='10m')d=d.filter(x=>x.u>=10);d.sort((a,b)=>a.u-b.u);const clr={'TikTok':'#010101','YouTube':'#FF0000','Instagram':'#E1306C','Facebook':'#1877F2','Snapchat':'#F7D600','Messenger':'#006AFF','LinkedIn':'#0077B5','X (Twitter)':'#14171A','Threads':'#000000'};ec('soc_plat',{tooltip:{...TTP,formatter:p=>`${p[0].axisValue}: <b>${p[0].value}M</b>`},grid:{top:10,right:90,bottom:36,left:90,containLabel:true},xAxis:{type:'value',axisLabel:{formatter:v=>v+'M'}},yAxis:{type:'category',data:d.map(x=>x.p),axisLabel:{fontSize:11}},series:[{type:'bar',data:d.map(x=>x.u),itemStyle:{color:p=>clr[d[p.dataIndex].p]||CC[0]},label:{show:true,position:'right',formatter:({value:v})=>v+'M',fontSize:12,fontWeight:'bold'}}]});}
 function soc_dig(){const f=document.getElementById('soc_df')?.value||'n';ec('soc_dig',{tooltip:{trigger:'axis'},legend:{top:0},grid:{...GRD,left:60},xAxis:{type:'category',data:D.digUsage.map(d=>d.c),axisLabel:{interval:0,fontSize:11}},yAxis:{type:'value'},series:[{type:'bar',data:D.digUsage.map(d=>f==='n'?d.n:d.p),itemStyle:{color:p=>CC[p.dataIndex]},barMaxWidth:60,label:{show:true,position:'top',formatter:({value:v})=>v+(f==='p'?'%':'M'),fontSize:11}}]});}
@@ -1357,11 +1357,11 @@ function renderTransport(){
 <div class="card-body"><div id="tr_bridge" class="chart ch-md"></div></div>${srcBar(['cso'])}
 </div>
 </div>`;
-  requestAnimationFrame(()=>{tr_cars();tr_road();tr_fuel();
+  setTimeout(()=>{tr_cars();tr_road();tr_fuel();
     ec('tr_veh',{tooltip:{...TTP,formatter:p=>`${p[0].axisValue}: ${(p[0].value/1e6).toFixed(2)}M`},grid:{...GRD,left:60},xAxis:{type:'category',data:D.veh.yr,axisLabel:{interval:0}},yAxis:{type:'value',axisLabel:{formatter:v=>(v/1e6).toFixed(1)+'M'}},series:[{type:'line',data:D.veh.t,smooth:false,lineStyle:{color:CC[0],width:2.5},itemStyle:{color:CC[0]},symbol:'circle',symbolSize:7,areaStyle:{color:'rgba(40,40,140,.07)'},label:{show:true,position:'top',formatter:({value:v})=>(v/1e6).toFixed(2)+'M',fontSize:10}}]});
     const bS=[...D.bridges.g.map((g,i)=>({g,v:D.bridges.t[i]}))].sort((a,b)=>b.v-a.v).reverse();
     ec('tr_bridge',{tooltip:TTP,grid:{top:10,right:50,bottom:36,left:100,containLabel:true},xAxis:{type:'value'},yAxis:{type:'category',data:bS.map(d=>gn(d.g)),axisLabel:{fontSize:9}},series:[{type:'bar',data:bS.map(d=>d.v),itemStyle:{color:CC[5]},label:{show:true,position:'right',fontSize:10}}]});
-  });
+  },50);
 }
 function tr_cars(){const f=document.getElementById('tr_cf')?.value||'desc';const d=[...D.carGov.g.map((g,i)=>({g,v:D.carGov.t[i]}))].sort((a,b)=>f==='desc'?b.v-a.v:a.v-b.v).reverse();ec('tr_cars',{tooltip:TTP,grid:{top:10,right:70,bottom:20,left:100,containLabel:true},xAxis:{type:'value',axisLabel:{formatter:v=>(v/1e6).toFixed(1)+'M',fontSize:10}},yAxis:{type:'category',data:d.map(x=>gn(x.g)),axisLabel:{fontSize:9}},series:[{type:'bar',data:d.map(x=>x.v),itemStyle:{color:p=>p.dataIndex===d.length-1?CC[1]:CC[0]},label:{show:true,position:'right',formatter:({value:v})=>(v/1e3).toFixed(0)+'K',fontSize:10}}]});}
 function tr_road(){const f=document.getElementById('tr_rf')?.value||'desc';const d=[...D.roads.g.map((g,i)=>({g,v:D.roads.t[i]}))].sort((a,b)=>f==='desc'?b.v-a.v:a.v-b.v).reverse();ec('tr_road',{tooltip:TTP,grid:{top:10,right:70,bottom:20,left:100,containLabel:true},xAxis:{type:'value'},yAxis:{type:'category',data:d.map(x=>gn(x.g)),axisLabel:{fontSize:9}},series:[{type:'bar',data:d.map(x=>x.v),itemStyle:{color:CC[2]},label:{show:true,position:'right',formatter:({value:v})=>v.toLocaleString()+'km',fontSize:10}}]});}
@@ -1400,10 +1400,10 @@ function renderEnv(){
 </div>${srcBar(['cso','wd','wmo','noaa'])}
 </div>
 </div>`;
-  requestAnimationFrame(()=>{env_tmp();
+  setTimeout(()=>{env_tmp();
     const h=[...D.heat25].sort((a,b)=>a.t-b.t);
     ec('env_heat',{tooltip:{...TTP,formatter:p=>`${p[0].axisValue}: <b>${p[0].value}°C</b>`},grid:{top:10,right:56,bottom:36,left:155,containLabel:true},xAxis:{type:'value',min:50,max:52.5,axisLabel:{formatter:v=>v+'°C',fontSize:10}},yAxis:{type:'category',data:h.map(d=>d.c),axisLabel:{fontSize:9}},series:[{type:'bar',data:h.map(d=>d.t),itemStyle:{color:p=>p.value>=51.5?'#7b0000':p.value>=51?CC[1]:'#F5A623'},label:{show:true,position:'right',formatter:({value:v})=>v+'°C',fontSize:11,fontWeight:'bold'}}]});
-  });
+  },50);
 }
 function env_tmp(){const f=document.getElementById('env_tsort')?.value||'desc';const d=[...D.tempGov.g.map((g,i)=>({g,t:D.tempGov.t[i]}))].sort((a,b)=>f==='desc'?b.t-a.t:a.t-b.t);ec('env_tmp',{tooltip:{...TTP,formatter:p=>`${p[0].axisValue}: ${p[0].value}°C`},grid:{...GRD,right:18,bottom:72},xAxis:{type:'category',data:d.map(x=>gn(x.g)),axisLabel:{rotate:35,fontSize:9}},yAxis:{type:'value',min:27,axisLabel:{formatter:v=>v+'°C',fontSize:10}},series:[{type:'bar',data:d.map(x=>x.t),itemStyle:{color:p=>p.value>33?'#C81414':p.value>31?'#F5A623':'#316BF3'},label:{show:true,position:'top',formatter:({value:v})=>v+'°C',fontSize:10}}]});}
 
@@ -1437,10 +1437,10 @@ function renderTourism(){
 <div class="card-body"><div id="tour_cmp" class="chart ch-sm"></div></div>${srcBar(['cso'])}
 </div>
 </div>`;
-  requestAnimationFrame(()=>{tour_cmp();
+  setTimeout(()=>{tour_cmp();
     ec('tour_pk',{tooltip:{trigger:'item',formatter:'{b}: {d}%'},legend:{bottom:4,textStyle:{fontSize:10},type:'scroll',padding:[0,10]},series:[{type:'pie',radius:['40%','67%'],label:{formatter:'{b}: {d}%',fontSize:10},data:D.tour.purPeak.map((d,i)=>({value:d.s,name:d.p,itemStyle:{color:CC[i]}}))}]});
     ec('tour_nm',{tooltip:{trigger:'item',formatter:'{b}: {d}%'},legend:{bottom:4,textStyle:{fontSize:10},type:'scroll',padding:[0,10]},series:[{type:'pie',radius:['40%','67%'],label:{formatter:'{b}: {d}%',fontSize:10},data:D.tour.purNorm.map((d,i)=>({value:d.s,name:d.p,itemStyle:{color:CC[i]}}))}]});
-  });
+  },50);
 }
 function tour_cmp(){const f=document.getElementById('tour_mf')?.value||'arr';const ar=LANG==='ar';const cfg={arr:{norm:6.71,peak:1.79},spd:{norm:4181.3,peak:437.2},avg:{norm:623.5,peak:244.8}};const c=cfg[f]||cfg.arr;ec('tour_cmp',{tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},grid:{...GRD,left:60,bottom:40},xAxis:{type:'category',data:[ar?'الموسم العادي':'Normal Period',ar?'موسم الذروة':'Peak Period'],axisLabel:{interval:0,fontSize:11}},yAxis:{type:'value'},series:[{type:'bar',data:[c.norm,c.peak],itemStyle:{color:p=>p.dataIndex===0?CC[0]:CC[1]},barMaxWidth:80,label:{show:true,position:'top',formatter:({value:v})=>v.toLocaleString(),fontSize:12,fontWeight:'bold'}}]});}
 
@@ -1474,10 +1474,10 @@ function renderConst(){
 <div class="card-body"><div id="con_top" class="chart"></div></div>${srcBar(['cso'])}
 </div>
 </div>`;
-  requestAnimationFrame(()=>{con_main();
+  setTimeout(()=>{con_main();
     ec('con_gov',{tooltip:{trigger:'item',formatter:'{b}: {c}%'},legend:{bottom:4,textStyle:{fontSize:10},type:'scroll',padding:[0,10]},series:[{type:'pie',radius:['36%','63%'],label:{formatter:'{b}: {c}%',fontSize:9},data:D.permByGov.map((d,i)=>({value:d.p,name:d.g,itemStyle:{color:CC[i%CC.length]}}))}]});
     ec('con_top',{tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{top:0},grid:{...GRD,left:70,top:30},xAxis:{type:'category',data:D.constGov.map(d=>gn(d.g))},yAxis:[{type:'value',name:'Contracts'},{type:'value',name:'Cost (B IQD)'}],series:[{name:'No. Contracts',type:'bar',data:D.constGov.map(d=>d.n),itemStyle:{color:CC[0]},barMaxWidth:48},{name:'Cost (B IQD)',type:'bar',yAxisIndex:1,data:D.constGov.map(d=>d.cost),itemStyle:{color:CC[1]},barMaxWidth:48}]});
-  });
+  },50);
 }
 function con_main(){const f=document.getElementById('con_type')?.value||'perm';const ar=LANG==='ar';if(f==='perm'){ec('con_main',{tooltip:TTP,grid:GRD,xAxis:{type:'category',data:D.bldPerm.yr,axisLabel:{interval:0,rotate:35,fontSize:9}},yAxis:{type:'value',axisLabel:{formatter:v=>v.toLocaleString()}},series:[{type:'bar',data:D.bldPerm.v,itemStyle:{color:CC[0]},label:{show:true,position:'top',formatter:({value:v})=>v.toLocaleString(),fontSize:10}}]});}else if(f==='both'){ec('con_main',{tooltip:TTP,legend:{top:0},grid:{...GRD,top:30},xAxis:{type:'category',data:D.contracts.yr,axisLabel:{interval:1,rotate:35,fontSize:9}},yAxis:{type:'value'},series:[{name:ar?'عقود البناء':'Building',type:'bar',data:D.contracts.b,itemStyle:{color:CC[0]},stack:'c'},{name:ar?'عقود التشييد':'Construction',type:'bar',data:D.contracts.c,itemStyle:{color:CC[1]},stack:'c'}]});}else{const dat=f==='bldg'?D.contracts.b:D.contracts.c;ec('con_main',{tooltip:TTP,grid:GRD,xAxis:{type:'category',data:D.contracts.yr,axisLabel:{interval:1,rotate:35,fontSize:9}},yAxis:{type:'value'},series:[{type:'bar',data:dat,itemStyle:{color:f==='bldg'?CC[0]:CC[1]},label:{show:true,position:'top',formatter:({value:v})=>v.toLocaleString(),fontSize:10}}]});}}
 
@@ -1506,7 +1506,7 @@ function renderInd(){
 <div class="frow"><span class="fl">${t('sort')}</span><select class="fsel" id="ind_gsort" onchange="ind_gov()"><option value="es">${ar?'حسب المنشآت':'By establishments'}</option><option value="wk">${ar?'حسب العمال':'By workers'}</option><option value="pr">${ar?'حسب الإنتاج':'By production'}</option></select></div>
 <div class="card-body"><div id="ind_gov" class="chart ch-md"></div></div>${srcBar(['cso'])}
 </div>`;
-  requestAnimationFrame(()=>{ind_grp();ind_gov();});
+  setTimeout(()=>{ind_grp();ind_gov();});
 }
 function ind_grp(){const m=document.getElementById('ind_mf')?.value||'pr';const vmap={pr:D.indGrp.pr,wk:D.indGrp.wk,va:D.indGrp.va,pl:D.indGrp.pl};const v=vmap[m];const d=[...D.indGrp.g.map((g,i)=>({g,v:v[i]}))].sort((a,b)=>a.v-b.v);ec('ind_grp',{tooltip:TTP,grid:{top:10,right:100,bottom:28,left:120,containLabel:true},xAxis:{type:'value',axisLabel:{formatter:v=>v>=1000?v.toLocaleString():v,fontSize:10}},yAxis:{type:'category',data:d.map(x=>x.g),axisLabel:{fontSize:10}},series:[{type:'bar',data:d.map(x=>x.v),itemStyle:{color:p=>CC[p.dataIndex%CC.length]},label:{show:true,position:'right',formatter:({value:v})=>v>=1000?v.toLocaleString():v,fontSize:10}}]});}
 function ind_gov(){const s=document.getElementById('ind_gsort')?.value||'es';const ar=LANG==='ar';const d=[...D.indGov.g.map((g,i)=>({g,es:D.indGov.es[i],wk:D.indGov.wk[i],pr:D.indGov.pr[i]}))].sort((a,b)=>b[s]-a[s]);ec('ind_gov',{tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{top:0},grid:{...GRD,left:80,bottom:70,top:30,containLabel:true},xAxis:{type:'category',data:d.map(x=>gn(x.g)),axisLabel:{rotate:35,fontSize:9}},yAxis:[{type:'value',name:ar?'المنشآت':'Estab.',nameTextStyle:{fontSize:9}},{type:'value',name:ar?'العمال':'Workers',nameTextStyle:{fontSize:9}}],series:[{name:ar?'المنشآت':'Establishments',type:'bar',data:d.map(x=>x.es),itemStyle:{color:CC[0]},barMaxWidth:22},{name:ar?'العمال':'Workers',type:'bar',yAxisIndex:1,data:d.map(x=>x.wk),itemStyle:{color:CC[1]},barMaxWidth:22}]});}
@@ -1538,6 +1538,8 @@ function updateHdrStat(i){
 function renderCensusHeatmap() {
   const ar = LANG === 'ar';
   const view = document.getElementById('cen_hm_view')?.value || 'age';
+  const el=document.getElementById('cenHeatmap');
+  if(!el||el.offsetParent===null){setTimeout(renderCensusHeatmap,120);return;}
   const TTP_local = {trigger:'axis',axisPointer:{type:'shadow'},backgroundColor:'#fff',borderColor:'#E5E8F0',borderWidth:1,textStyle:{color:'#0E1330',fontSize:12},extraCssText:'box-shadow:0 4px 20px rgba(14,19,48,.12);border-radius:6px'};
 
   if (view === 'age') {
@@ -1551,7 +1553,7 @@ function renderCensusHeatmap() {
       legend: { data: [ar?'أقل من 14':'Under 14', ar?'15–64 سنة':'Ages 15–64', ar?'65 فأكثر':'65 and Over'], top: 4, textStyle:{fontSize:11} },
       grid: { top:36, right:24, bottom:22, left:96, containLabel:true },
       xAxis: { type:'value', max:100, axisLabel:{formatter:v=>v+'%',fontSize:10} },
-      yAxis: { type:'category', data: govs.map(d => ar?(T.en.govAR[d.g]||d.g):d.g), axisLabel:{fontSize:10} },
+      yAxis: { type:'category', data: govs.map(d => gn(d.g)), axisLabel:{fontSize:10} },
       series: [
         { name: ar?'أقل من 14':'Under 14', type:'bar', stack:'age', data: govs.map(d=>d.p014),
           itemStyle:{color:'#C81414'}, label:{show:true,formatter:({value:v})=>v+'%',fontSize:9,color:'#fff'} },
@@ -1573,7 +1575,7 @@ function renderCensusHeatmap() {
       legend: { data:[ar?'مياه الأنابيب':'Piped Water', ar?'الصرف الصحي':'Sewage', ar?'جمع النفايات':'Waste Collection'], top:4, textStyle:{fontSize:11} },
       grid: { top:36, right:24, bottom:22, left:96, containLabel:true },
       xAxis: { type:'value', max:100, axisLabel:{formatter:v=>v+'%',fontSize:10} },
-      yAxis: { type:'category', data: govs.map(d => ar?(T.en.govAR[d.g]||d.g):d.g), axisLabel:{fontSize:10} },
+      yAxis: { type:'category', data: govs.map(d => gn(d.g)), axisLabel:{fontSize:10} },
       series: [
         { name:ar?'مياه الأنابيب':'Piped Water', type:'bar', data:govs.map(d=>d.water), itemStyle:{color:'#316BF3'}, barMaxWidth:14, label:{show:true,position:'right',formatter:({value:v})=>v+'%',fontSize:9} },
         { name:ar?'الصرف الصحي':'Sewage', type:'bar', data:govs.map(d=>d.sew), itemStyle:{color:'#F5A623'}, barMaxWidth:14, label:{show:true,position:'right',formatter:({value:v})=>v+'%',fontSize:9} },
@@ -1588,7 +1590,7 @@ function renderCensusHeatmap() {
       tooltip: { ...TTP_local, formatter: p => `<b>${p[0].axisValue}</b><br/>${ar?'نسبة الإعالة':'Dependency Ratio'}: <b>${p[0].value}</b><br/><span style="font-size:11px;color:#888">${ar?'لكل 100 شخص في سن العمل':'per 100 working-age people'}</span>` },
       grid: { top:20, right:50, bottom:22, left:96, containLabel:true },
       xAxis: { type:'value', min:50, max:80, axisLabel:{fontSize:10} },
-      yAxis: { type:'category', data: govs.map(d => ar?(T.en.govAR[d.g]||d.g):d.g), axisLabel:{fontSize:10} },
+      yAxis: { type:'category', data: govs.map(d => gn(d.g)), axisLabel:{fontSize:10} },
       series: [{
         type:'bar', data: govs.map(d=>d.dep),
         itemStyle:{color:p=>p.value>=74?'#C81414':p.value>=65?'#F5A623':'#28288C'},
@@ -1600,7 +1602,7 @@ function renderCensusHeatmap() {
   } else if (view === 'hh') {
     /* ── Bubble/Scatter: Avg HH size vs % Urban ───────────── */
     const scatterData = D.cns.govs.map(d => ({
-      name: ar?(T.en.govAR[d.g]||d.g):d.g,
+      name: gn(d.g),
       value: [d.pUrb, d.avgHH, d.dep],
     }));
     ec('cenHeatmap', {
@@ -1665,15 +1667,30 @@ function updateFt(){const ar=LANG==='ar';document.getElementById('ftSrcLbl').tex
 
 /* ══ LANGUAGE SWITCH ══════════════════════════════════════ */
 function setLang(lang){
-  LANG=lang;const html=document.getElementById('htmlRoot');html.lang=lang;html.dir=lang==='ar'?'rtl':'ltr';
+  LANG=lang;
+  const htmlEl=document.getElementById('htmlRoot');
+  htmlEl.lang=lang;
+  htmlEl.dir=lang==='ar'?'rtl':'ltr';
   document.getElementById('btnEN').classList.toggle('active',lang==='en');
   document.getElementById('btnAR').classList.toggle('active',lang==='ar');
   document.getElementById('hdrTitle').textContent=TR[lang].hdrTitle;
   document.getElementById('hdrSub').textContent=TR[lang].hdrSub;
   document.getElementById('hdrStatLbl').textContent=TR[lang].hdrStat;
+  // Step 1: dispose all charts and do a first render
   Object.values(CH).forEach(c=>{try{c.dispose();}catch(e){}});
-  DONE.clear();DONE.add(CUR);REND[CUR]();buildTabs();updateHdrStat(CUR);updateFt();
+  DONE.clear();
+  buildTabs();updateHdrStat(CUR);updateFt();
+  // Step 2: wait for RTL layout to fully paint, then do a clean render
+  setTimeout(()=>{
+    REND[CUR]();
+    DONE.add(CUR);
+    // Step 3: after charts init, resize everything
+    setTimeout(()=>{
+      Object.values(CH).forEach(c=>{try{c.resize();}catch(e){}});
+    },300);
+  },80);
 }
+
 
 
 /* ══ EXCEL DATA FOR DOWNLOADS ════════════════════════════ */
@@ -3944,7 +3961,6 @@ function applyDark(on){
 }
 function toggleDark(){applyDark(!darkMode);}
 
-   
 /* ── KPI counter animation ───────────────────────────────────── */
 function animateKPIs(pageEl){
   const kpiVals=pageEl.querySelectorAll('.kpi-val');
